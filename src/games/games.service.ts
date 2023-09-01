@@ -66,8 +66,11 @@ export class GamesService {
         `This game doesn't have enough players to start!`,
       );
     }
+    if (game.startedAt) {
+      throw new BadRequestException('The game has already been started!');
+    }
 
-    return this.repo.save({ ...game, startedAt: new Date() });
+    return this.repo.save({ ...game, startedAt: new Date(), stoppedAt: null });
   }
 
   async stopGame(id: number) {
@@ -86,7 +89,7 @@ export class GamesService {
       throw new BadRequestException('Game has already finished!');
     }
 
-    return this.repo.save({ ...game, stoppedAt: new Date() });
+    return this.repo.save({ ...game, stoppedAt: new Date(), startedAt: null });
   }
 
   async addPlayerToGameById(id: number, playerId: number): Promise<Games> {
