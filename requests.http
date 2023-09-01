@@ -16,3 +16,6 @@ Content-Type: application/json
 
 ### Get game info by ID
 GET http://localhost:3000/games/3
+
+### Get all games
+GET http://localhost:3000/games

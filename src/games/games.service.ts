@@ -34,4 +34,8 @@ export class GamesService {
     }
     return game;
   }
+
+  async getAllGames(): Promise<Games[] | []> {
+    return this.repo.find();
+  }
 }

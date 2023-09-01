@@ -33,4 +33,9 @@ export class GamesController {
   getGameInfo(@Param('id', new ParseIntPipe()) id: number): Promise<Games> {
     return this.gamesService.getGameInfoById(+id);
   }
+
+  @Get()
+  getAllGames(): Promise<Games[] | []> {
+    return this.gamesService.getAllGames();
+  }
 }
