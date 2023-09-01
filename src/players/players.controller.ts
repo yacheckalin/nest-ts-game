@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { Players } from './players.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
@@ -10,5 +17,10 @@ export class PlayersController {
   @Post()
   createPlayer(@Body() body: Partial<CreatePlayerDto>): Promise<Players> {
     return this.playersService.createPlayer(body);
+  }
+
+  @Get('/:id')
+  getPlayerInfo(@Param('id', new ParseIntPipe()) id: number): Promise<Players> {
+    return this.playersService.getPlayerById(+id);
   }
 }

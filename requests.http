@@ -28,3 +28,6 @@ Content-Type: application/json
 {
   "nickName": "Player_1"
 }
+
+### Get player info by ID
+GET http://localhost:3000/players/1
