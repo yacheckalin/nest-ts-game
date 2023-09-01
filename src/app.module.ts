@@ -10,6 +10,10 @@ import { Moves } from './moves/moves.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+    }),
     GamesModule,
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -19,10 +23,6 @@ import { Moves } from './moves/moves.entity';
         entities: [Games, Players, Moves],
         synchronize: true,
       }),
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
     PlayersModule,
     MovesModule,

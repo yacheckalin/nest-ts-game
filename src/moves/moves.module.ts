@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { MovesService } from './moves.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Moves } from './moves.entity';
-import { Players } from 'src/players/players.entity';
-import { GamesService } from 'src/games/games.service';
-import { PlayersService } from 'src/players/players.service';
-import { Games } from 'src/games/games.entity';
+import { Players } from '../players/players.entity';
+import { GamesService } from '../games/games.service';
+import { PlayersService } from '../players/players.service';
+import { Games } from '../games/games.entity';
 
 @Module({
   providers: [MovesService, GamesService, PlayersService],

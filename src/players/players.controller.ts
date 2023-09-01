@@ -10,7 +10,7 @@ import {
 import { PlayersService } from './players.service';
 import { Players } from './players.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('players')
 @Controller('players')

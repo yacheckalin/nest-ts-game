@@ -1,5 +1,6 @@
-import { Games } from 'src/games/games.entity';
-import { Players } from 'src/players/players.entity';
+import { Games } from '../games/games.entity';
+import { Players } from '../players/players.entity';
+
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

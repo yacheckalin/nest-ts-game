@@ -1,5 +1,5 @@
-import { Moves } from 'src/moves/moves.entity';
-import { Players } from 'src/players/players.entity';
+import { Moves } from '../moves/moves.entity';
+import { Players } from '../players/players.entity';
 import {
   AfterInsert,
   AfterLoad,

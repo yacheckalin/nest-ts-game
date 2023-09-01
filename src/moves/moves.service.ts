@@ -3,8 +3,8 @@ import { Repository } from 'typeorm';
 import { Moves } from './moves.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MakeMoveDto } from './dto/make-move.dto';
-import { Players, PlayersStatus } from 'src/players/players.entity';
-import { Games } from 'src/games/games.entity';
+import { Players, PlayersStatus } from '../players/players.entity';
+import { Games } from '../games/games.entity';
 
 @Injectable()
 export class MovesService {
