@@ -25,4 +25,13 @@ export class GamesService {
     const updatedGame = { ...game, ...body };
     return this.repo.save(updatedGame);
   }
+
+  async getGameInfoById(id: number): Promise<Games> {
+    const game = await this.repo.findOne({ where: { id } });
+
+    if (!game) {
+      throw new NotFoundException('There is no game with such ID');
+    }
+    return game;
+  }
 }

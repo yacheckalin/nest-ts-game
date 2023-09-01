@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   ParseIntPipe,
+  Get,
 } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -26,5 +27,10 @@ export class GamesController {
     @Body() body: Partial<UpdateGameDto>,
   ): Promise<Games> {
     return this.gamesService.updateGame(+id, body);
+  }
+
+  @Get('/:id')
+  getGameInfo(@Param('id', new ParseIntPipe()) id: number): Promise<Games> {
+    return this.gamesService.getGameInfoById(+id);
   }
 }
