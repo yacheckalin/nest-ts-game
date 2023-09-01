@@ -5,6 +5,8 @@ import { GamesModule } from './games/games.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Games } from './games/games.entity';
+import { PlayersModule } from './players/players.module';
+import { Players } from './players/players.entity';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { Games } from './games/games.entity';
       useFactory: (config: ConfigService) => ({
         type: 'sqlite',
         database: config.get<string>('SQL_DB_NAME'),
-        entities: [Games],
+        entities: [Games, Players],
         synchronize: true,
       }),
     }),
@@ -22,6 +24,7 @@ import { Games } from './games/games.entity';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
+    PlayersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
