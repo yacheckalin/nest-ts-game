@@ -15,7 +15,9 @@ import { AddPlayerDto } from './dto/add-player.dto';
 import { MakeMoveDto } from 'src/moves/dto/make-move.dto';
 import { Moves } from 'src/moves/moves.entity';
 import { MovesService } from 'src/moves/moves.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('games')
 @Controller('games')
 export class GamesController {
   constructor(
@@ -23,11 +25,13 @@ export class GamesController {
     private readonly movesService: MovesService,
   ) {}
 
+  @ApiOperation({ summary: 'Create new game' })
   @Post()
   createNewGame(@Body() body: CreateGameDto): Promise<Games> {
     return this.gamesService.createGame(body);
   }
 
+  @ApiOperation({ summary: 'Update game by id' })
   @Patch('/:id')
   updateGameById(
     @Param('id', new ParseIntPipe()) id: number,
@@ -36,26 +40,31 @@ export class GamesController {
     return this.gamesService.updateGame(+id, body);
   }
 
+  @ApiOperation({ summary: 'Get games info by id' })
   @Get('/:id')
   getGameInfo(@Param('id', new ParseIntPipe()) id: number): Promise<Games> {
     return this.gamesService.getGameInfoById(+id);
   }
 
+  @ApiOperation({ summary: 'Get all games' })
   @Get()
   getAllGames(): Promise<Games[] | []> {
     return this.gamesService.getAllGames();
   }
 
+  @ApiOperation({ summary: 'Start prepared game' })
   @Post('/:id/start')
   startGame(@Param('id', new ParseIntPipe()) id: number): Promise<Games> {
     return this.gamesService.startGame(+id);
   }
 
+  @ApiOperation({ summary: 'Stop playing game' })
   @Post('/:id/stop')
   stopGame(@Param('id', new ParseIntPipe()) id: number): Promise<Games> {
     return this.gamesService.stopGame(+id);
   }
 
+  @ApiOperation({ summary: 'Add new player to the games players pool' })
   @Post('/:id/add-player')
   addPlayer(
     @Param('id', new ParseIntPipe()) id: number,
@@ -64,6 +73,7 @@ export class GamesController {
     return this.gamesService.addPlayerToGameById(+id, +body.playerId);
   }
 
+  @ApiOperation({ summary: 'Remove player from the pool' })
   @Post('/:id/remove-player')
   removePlayer(
     @Param('id', new ParseIntPipe()) id: number,
@@ -72,6 +82,7 @@ export class GamesController {
     return this.gamesService.removePlayerFromGameById(+id, +body.playerId);
   }
 
+  @ApiOperation({ summary: 'Make a move in the current game' })
   @Post('/make-move')
   makeMove(@Body() body: Partial<MakeMoveDto>): Promise<Moves> {
     return this.movesService.makeMove(body);

@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Games } from 'src/games/games.entity';
 import { Moves } from 'src/moves/moves.entity';
 import {
@@ -18,12 +19,18 @@ export class Players {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty({ example: 'Player_1', description: 'NickName of the Player' })
   @Column()
   nickName: string;
 
+  @ApiProperty({
+    examples: [PlayersStatus.PLAYING, PlayersStatus.WAITING],
+    description: 'Shows whos been playing',
+  })
   @Column({ default: PlayersStatus.WAITING, enum: PlayersStatus })
   status: string;
 
+  @ApiProperty({ example: 1, description: 'The number in players pool' })
   @Column({ default: 1 })
   numberInLine: number;
 
