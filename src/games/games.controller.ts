@@ -12,10 +12,16 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { Games } from './games.entity';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { AddPlayerDto } from './dto/add-player.dto';
+import { MakeMoveDto } from 'src/moves/dto/make-move.dto';
+import { Moves } from 'src/moves/moves.entity';
+import { MovesService } from 'src/moves/moves.service';
 
 @Controller('games')
 export class GamesController {
-  constructor(private readonly gamesService: GamesService) {}
+  constructor(
+    private readonly gamesService: GamesService,
+    private readonly movesService: MovesService,
+  ) {}
 
   @Post()
   createNewGame(@Body() body: CreateGameDto): Promise<Games> {
@@ -64,5 +70,10 @@ export class GamesController {
     @Body() body: AddPlayerDto,
   ): Promise<Games> {
     return this.gamesService.removePlayerFromGameById(+id, +body.playerId);
+  }
+
+  @Post('/make-move')
+  makeMove(@Body() body: Partial<MakeMoveDto>): Promise<Moves> {
+    return this.movesService.makeMove(body);
   }
 }

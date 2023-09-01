@@ -1,5 +1,6 @@
 import { Games } from 'src/games/games.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Moves } from 'src/moves/moves.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum PlayersStatus {
   WAITING = 'waiting',
@@ -22,4 +23,7 @@ export class Players {
 
   @ManyToOne(() => Games, (game) => game.players)
   game: Games;
+
+  @OneToMany(() => Moves, (move) => move.player)
+  move: Moves[];
 }

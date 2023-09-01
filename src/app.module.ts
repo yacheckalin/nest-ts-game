@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Games } from './games/games.entity';
 import { PlayersModule } from './players/players.module';
 import { Players } from './players/players.entity';
+import { MovesModule } from './moves/moves.module';
+import { Moves } from './moves/moves.entity';
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { Players } from './players/players.entity';
       useFactory: (config: ConfigService) => ({
         type: 'sqlite',
         database: config.get<string>('SQL_DB_NAME'),
-        entities: [Games, Players],
+        entities: [Games, Players, Moves],
         synchronize: true,
       }),
     }),
@@ -25,6 +27,7 @@ import { Players } from './players/players.entity';
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
     PlayersModule,
+    MovesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,3 +1,4 @@
+import { Moves } from 'src/moves/moves.entity';
 import { Players } from 'src/players/players.entity';
 import {
   AfterInsert,
@@ -17,7 +18,7 @@ export class Games {
   @Column({ default: 2 })
   maxPlayer: number;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   winner: number;
 
   @Column({ nullable: true })
@@ -34,6 +35,9 @@ export class Games {
 
   @OneToMany(() => Players, (player) => player.game)
   players: Players[];
+
+  @OneToMany(() => Moves, (move) => move.game)
+  moves: Moves[];
 
   @AfterInsert()
   @AfterLoad()
