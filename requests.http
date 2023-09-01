@@ -31,3 +31,13 @@ Content-Type: application/json
 
 ### Get player info by ID
 GET http://localhost:3000/players/1
+
+### Update player by ID
+PATCH  http://localhost:3000/players/1
+Content-Type: application/json
+
+{
+  "status": "playing",
+  "numberInLine": 1,
+  "nickName": "S_1"
+}

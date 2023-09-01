@@ -1,4 +1,4 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsPositive, IsString } from 'class-validator';
 import { PlayersStatus } from '../players.entity';
 
 export class CreatePlayerDto {
@@ -7,4 +7,8 @@ export class CreatePlayerDto {
 
   @IsEnum(PlayersStatus)
   status: string;
+
+  @IsOptional()
+  @IsPositive()
+  numberInLine: number;
 }

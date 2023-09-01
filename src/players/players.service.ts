@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Players } from './players.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,5 +27,23 @@ export class PlayersService {
     }
 
     return player;
+  }
+
+  async updatePlayerById(
+    id: number,
+    body: Partial<CreatePlayerDto>,
+  ): Promise<Players> {
+    try {
+      const player = await this.repo.findOne({ where: { id } });
+
+      if (!player) {
+        throw new NotFoundException('There is no player with such ID');
+      }
+      const updatedPlayer = { ...player, ...body };
+      const result = await this.repo.save(updatedPlayer);
+      return result;
+    } catch (e) {
+      throw new InternalServerErrorException(e.message);
+    }
   }
 }
