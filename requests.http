@@ -1,0 +1,7 @@
+## Create new game for maxPlayers number
+POST http://localhost:3000/games
+Content-Type: application/json
+
+{
+  "maxPlayer": 2
+}

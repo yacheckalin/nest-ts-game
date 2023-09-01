@@ -11,15 +11,15 @@ export class Games {
   @Column({ default: null })
   winner: number;
 
-  @Column()
+  @Column({ nullable: true })
   createdAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   startedAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   stoppedAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   endedAt: Date;
 }
