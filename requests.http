@@ -1,0 +1,21 @@
+### Create new game for maxPlayers number
+POST http://localhost:3000/games
+Content-Type: application/json
+
+{
+  "maxPlayer": 2
+}
+
+### Update game by ID
+PATCH  http://localhost:3000/games/1
+Content-Type: application/json
+
+{
+  "stoppedAt": "2023-09-01T09:30:45.842Z"
+}
+
+### Get game info by ID
+GET http://localhost:3000/games/3
+
+### Get all games
+GET http://localhost:3000/games
