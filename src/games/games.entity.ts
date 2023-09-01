@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Players } from 'src/players/players.entity';
+import {
+  AfterInsert,
+  AfterLoad,
+  AfterUpdate,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Games {
@@ -22,4 +31,16 @@ export class Games {
 
   @Column({ nullable: true })
   endedAt: Date;
+
+  @OneToMany(() => Players, (player) => player.game)
+  players: Players[];
+
+  @AfterInsert()
+  @AfterLoad()
+  @AfterUpdate()
+  async nullChecks() {
+    if (!this.players) {
+      this.players = [];
+    }
+  }
 }

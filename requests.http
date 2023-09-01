@@ -15,7 +15,55 @@ Content-Type: application/json
 }
 
 ### Get game info by ID
-GET http://localhost:3000/games/3
+GET http://localhost:3000/games/1
 
 ### Get all games
 GET http://localhost:3000/games
+
+
+### Start game
+POST http://localhost:3000/games/1/start
+
+
+### Stop game
+POST http://localhost:3000/games/1/stop
+
+### Add player to game
+POST http://localhost:3000/games/1/add-player
+Content-Type: application/json
+
+{
+  "playerId": 1
+}
+
+### Remove player from game
+POST http://localhost:3000/games/1/remove-player
+Content-Type: application/json
+
+{
+  "playerId": 1
+}
+
+### Create new player
+POST http://localhost:3000/players
+Content-Type: application/json
+
+{
+  "nickName": "Player_1"
+}
+
+### Get player info by ID
+GET http://localhost:3000/players/1
+
+### Update player by ID
+PATCH  http://localhost:3000/players/1
+Content-Type: application/json
+
+{
+  "status": "playing",
+  "numberInLine": 1,
+  "nickName": "S_1"
+}
+
+### Get all players
+GET http://localhost:3000/players
