@@ -57,4 +57,12 @@ export class GamesController {
   ): Promise<Games> {
     return this.gamesService.addPlayerToGameById(+id, +body.playerId);
   }
+
+  @Post('/:id/remove-player')
+  removePlayer(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() body: AddPlayerDto,
+  ): Promise<Games> {
+    return this.gamesService.removePlayerFromGameById(+id, +body.playerId);
+  }
 }

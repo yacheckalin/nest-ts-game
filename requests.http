@@ -33,7 +33,15 @@ POST http://localhost:3000/games/1/add-player
 Content-Type: application/json
 
 {
-  "playerId": 3
+  "playerId": 1
+}
+
+### Remove player from game
+POST http://localhost:3000/games/1/remove-player
+Content-Type: application/json
+
+{
+  "playerId": 1
 }
 
 ### Create new player

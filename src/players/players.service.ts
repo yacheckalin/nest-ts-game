@@ -20,7 +20,10 @@ export class PlayersService {
   }
 
   async getPlayerById(id: number): Promise<Players> {
-    const player = await this.repo.findOne({ where: { id } });
+    const player = await this.repo.findOne({
+      where: { id },
+      relations: { game: true },
+    });
 
     if (!player) {
       throw new NotFoundException('There is no player with such ID');
@@ -48,7 +51,7 @@ export class PlayersService {
   }
 
   findAllPlayers(): Promise<Players[] | []> {
-    return this.repo.find();
+    return this.repo.find({ relations: { game: true } });
   }
 
   getNotBusyPlayer(): Promise<Players> {
