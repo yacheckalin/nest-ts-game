@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Games } from './games.entity';
@@ -27,7 +31,10 @@ export class GamesService {
   }
 
   async getGameInfoById(id: number): Promise<Games> {
-    const game = await this.repo.findOne({ where: { id } });
+    const game = await this.repo.findOne({
+      where: { id },
+      relations: { players: true },
+    });
 
     if (!game) {
       throw new NotFoundException('There is no game with such ID');
@@ -36,6 +43,46 @@ export class GamesService {
   }
 
   async getAllGames(): Promise<Games[] | []> {
-    return this.repo.find();
+    return this.repo.find({ relations: { players: true } });
+  }
+
+  async startGame(id: number) {
+    const game = await this.repo.findOne({
+      where: { id },
+      relations: { players: true },
+    });
+
+    if (!game) {
+      throw new NotFoundException('There is no game with such ID');
+    }
+    if (game.endedAt && game.winner) {
+      throw new BadRequestException('The game has already overed!');
+    }
+    if (game.players.length < game.maxPlayer) {
+      throw new BadRequestException(
+        `This game doesn't have enough players to start!`,
+      );
+    }
+
+    return this.repo.save({ ...game, startedAt: new Date() });
+  }
+
+  async stopGame(id: number) {
+    const game = await this.repo.findOne({
+      where: { id },
+      relations: { players: true },
+    });
+
+    if (!game) {
+      throw new NotFoundException('There is no game with such ID');
+    }
+    if (!game.startedAt) {
+      throw new BadRequestException('Game did not start yet!');
+    }
+    if (game.endedAt && game.winner) {
+      throw new BadRequestException('Game has already finished!');
+    }
+
+    return this.repo.save({ ...game, stoppedAt: new Date() });
   }
 }

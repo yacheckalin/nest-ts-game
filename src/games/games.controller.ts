@@ -38,4 +38,14 @@ export class GamesController {
   getAllGames(): Promise<Games[] | []> {
     return this.gamesService.getAllGames();
   }
+
+  @Post('/:id/start')
+  startGame(@Param('id', new ParseIntPipe()) id: number): Promise<Games> {
+    return this.gamesService.startGame(+id);
+  }
+
+  @Post('/:id/stop')
+  stopGame(@Param('id', new ParseIntPipe()) id: number): Promise<Games> {
+    return this.gamesService.stopGame(+id);
+  }
 }

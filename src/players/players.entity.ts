@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Games } from 'src/games/games.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum PlayersStatus {
   WAITING = 'waiting',
@@ -18,4 +19,7 @@ export class Players {
 
   @Column({ default: 1 })
   numberInLine: number;
+
+  @ManyToOne(() => Games, (game) => game.players)
+  game: Games;
 }

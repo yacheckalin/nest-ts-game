@@ -15,11 +15,18 @@ Content-Type: application/json
 }
 
 ### Get game info by ID
-GET http://localhost:3000/games/3
+GET http://localhost:3000/games/1
 
 ### Get all games
 GET http://localhost:3000/games
 
+
+### Start game
+POST http://localhost:3000/games/1/start
+
+
+### Stop game
+POST http://localhost:3000/games/1/stop
 
 ### Create new player
 POST http://localhost:3000/players
