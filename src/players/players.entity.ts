@@ -1,6 +1,12 @@
 import { Games } from 'src/games/games.entity';
 import { Moves } from 'src/moves/moves.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum PlayersStatus {
   WAITING = 'waiting',
