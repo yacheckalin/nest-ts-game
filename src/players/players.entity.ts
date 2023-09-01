@@ -16,6 +16,6 @@ export class Players {
   @Column({ default: PlayersStatus.WAITING, enum: PlayersStatus })
   status: string;
 
-  @Column()
+  @Column({ default: 1 })
   numberInLine: number;
 }

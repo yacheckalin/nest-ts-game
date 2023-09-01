@@ -19,3 +19,12 @@ GET http://localhost:3000/games/3
 
 ### Get all games
 GET http://localhost:3000/games
+
+
+### Create new player
+POST http://localhost:3000/players
+Content-Type: application/json
+
+{
+  "nickName": "Player_1"
+}
