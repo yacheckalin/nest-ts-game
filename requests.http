@@ -28,6 +28,14 @@ POST http://localhost:3000/games/1/start
 ### Stop game
 POST http://localhost:3000/games/1/stop
 
+### Add player to game
+POST http://localhost:3000/games/1/add-player
+Content-Type: application/json
+
+{
+  "playerId": 3
+}
+
 ### Create new player
 POST http://localhost:3000/players
 Content-Type: application/json

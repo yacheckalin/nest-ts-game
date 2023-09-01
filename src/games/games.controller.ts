@@ -11,6 +11,7 @@ import { GamesService } from './games.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { Games } from './games.entity';
 import { UpdateGameDto } from './dto/update-game.dto';
+import { AddPlayerDto } from './dto/add-player.dto';
 
 @Controller('games')
 export class GamesController {
@@ -47,5 +48,13 @@ export class GamesController {
   @Post('/:id/stop')
   stopGame(@Param('id', new ParseIntPipe()) id: number): Promise<Games> {
     return this.gamesService.stopGame(+id);
+  }
+
+  @Post('/:id/add-player')
+  addPlayer(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body() body: AddPlayerDto,
+  ): Promise<Games> {
+    return this.gamesService.addPlayerToGameById(+id, +body.playerId);
   }
 }
