@@ -32,4 +32,9 @@ export class PlayersController {
   ): Promise<Players> {
     return this.playersService.updatePlayerById(+id, body);
   }
+
+  @Get()
+  getAllPlayers(): Promise<Players[] | []> {
+    return this.playersService.findAllPlayers();
+  }
 }

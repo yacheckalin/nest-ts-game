@@ -41,3 +41,6 @@ Content-Type: application/json
   "numberInLine": 1,
   "nickName": "S_1"
 }
+
+### Get all players
+GET http://localhost:3000/players

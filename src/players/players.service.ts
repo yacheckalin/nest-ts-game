@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Players } from './players.entity';
+import { Players, PlayersStatus } from './players.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePlayerDto } from './dto/create-player.dto';
 
@@ -45,5 +45,13 @@ export class PlayersService {
     } catch (e) {
       throw new InternalServerErrorException(e.message);
     }
+  }
+
+  findAllPlayers(): Promise<Players[] | []> {
+    return this.repo.find();
+  }
+
+  getNotBusyPlayer(): Promise<Players> {
+    return this.repo.findOne({ where: { status: PlayersStatus.WAITING } });
   }
 }
