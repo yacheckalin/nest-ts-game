@@ -3,8 +3,9 @@ import { Repository } from 'typeorm';
 import { Moves } from './moves.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MakeMoveDto } from './dto/make-move.dto';
-import { Players, PlayersStatus } from 'src/players/players.entity';
-import { Games } from 'src/games/games.entity';
+import { Players, PlayersStatus } from '../players/players.entity';
+import { Games } from '../games/games.entity';
+import { calculate } from './store/helpers';
 
 @Injectable()
 export class MovesService {
@@ -64,7 +65,7 @@ export class MovesService {
 
     const returnedValue =
       data?.value ||
-      this.calculateValue(
+      calculate(
         game.moves.length ? lastMoveValue : Math.floor(Math.random() * 45) + 1,
       );
 
@@ -94,15 +95,5 @@ export class MovesService {
     }
 
     return this.repo.save(move);
-  }
-
-  calculateValue(last: number): number {
-    if (last % 3 === 0) {
-      return last / 3;
-    }
-    if ((last - 1) % 3 === 0) {
-      return (last - 1) / 3;
-    }
-    return (last + 1) / 3;
   }
 }

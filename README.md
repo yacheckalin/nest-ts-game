@@ -54,7 +54,7 @@ MVP
 - add WebSockets (add redis-adapter / socket.io platform)
 - refactor services (move reusable code)
 - remove all hard-code (constants)
-- add Swagger for the documentation
+- [**] add Swagger for the documentation
 
 UI
 

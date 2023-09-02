@@ -12,9 +12,9 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { Games } from './games.entity';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { AddPlayerDto } from './dto/add-player.dto';
-import { MakeMoveDto } from 'src/moves/dto/make-move.dto';
-import { Moves } from 'src/moves/moves.entity';
-import { MovesService } from 'src/moves/moves.service';
+import { MakeMoveDto } from '../moves/dto/make-move.dto';
+import { Moves } from '../moves/moves.entity';
+import { MovesService } from '../moves/moves.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('games')

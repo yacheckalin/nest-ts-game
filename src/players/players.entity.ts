@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Games } from 'src/games/games.entity';
-import { Moves } from 'src/moves/moves.entity';
+import { Games } from '../games/games.entity';
+import { Moves } from '../moves/moves.entity';
+
 import {
   Column,
   Entity,
