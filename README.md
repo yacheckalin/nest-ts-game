@@ -38,9 +38,9 @@ $ npm run test:cov
 
 TESTING
 
-- add unit tests
-- add e2e tests
-- add test/dev environment
+- [**] add unit tests
+- [**] add e2e tests
+- [**] add test/dev environment
 
 BUSINESS FLEXIBILITY
 

@@ -41,7 +41,7 @@ export class MovesService {
       !game.players.filter(({ id }) => id === data.player).length
     ) {
       throw new BadRequestException(
-        'Player doe not have permission to make move in this game!',
+        'Player does not have permission to make a move in this game!',
       );
     }
 
