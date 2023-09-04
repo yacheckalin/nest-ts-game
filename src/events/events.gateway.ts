@@ -10,7 +10,7 @@ import { GamesService } from '../games/games.service';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const crypto = require('crypto');
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: { origin: '*' } })
 export class EventsGateway {
   @WebSocketServer()
   server: Server;
@@ -20,31 +20,43 @@ export class EventsGateway {
     private readonly gamesService: GamesService,
   ) {}
 
-  @SubscribeMessage('init')
+  @SubscribeMessage('init-shake')
   async handleShake(client: any, payload: any) {
     try {
-      // get first not busy or create new player
-      const notBusyPlayer = await this.playerService.getNotBusyPlayer();
       let player = null;
-      if (!notBusyPlayer) {
-        player = await this.playerService.createPlayer({
-          nickName: `PLAYER_${crypto.randomUUID()}`,
-        });
+      if (!payload?.player) {
+        // get first not busy or create new player
+        const notBusyPlayer = await this.playerService.getNotBusyPlayer();
+        if (!notBusyPlayer) {
+          player = await this.playerService.createPlayer({
+            nickName: `PLAYER_${crypto.randomUUID()}`,
+          });
+        }
+        player = notBusyPlayer || player;
+        client.emit('init-player', { player });
+      } else {
+        player = payload.player;
       }
-      player = notBusyPlayer || player;
-      client.emit('init-player', { player });
+      let game = null;
 
       // get first available game
-      let game = null;
-      const firstAvailableGame = await this.gamesService.getFirstAvailable();
+      if (!payload?.game) {
+        const firstAvailableGame = await this.gamesService.getFirstAvailable();
 
-      // add player to the first available game
-      game = await this.gamesService.addPlayerToGameById(
-        firstAvailableGame?.id,
-        player.id,
-      );
+        if (!firstAvailableGame) {
+          client.emit('error', {
+            message: 'There is no available game yet, please wait ...',
+          });
+        } else {
+          // add player to the first available game
+          game = await this.gamesService.addPlayerToGameById(
+            firstAvailableGame?.id,
+            player.id,
+          );
 
-      client.emit('init-game', { game, player });
+          client.emit('init-game', { game, player });
+        }
+      }
     } catch (e) {
       client.emit('error', e.message);
     }
