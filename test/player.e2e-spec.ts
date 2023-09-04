@@ -39,7 +39,6 @@ describe('PlayersController (e2e)', () => {
           expect(nickName).toEqual('Test_1');
         });
     });
-
   });
 
   it('returns player info', () => {

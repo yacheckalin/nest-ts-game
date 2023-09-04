@@ -439,15 +439,6 @@ describe('GamesController (e2e)', () => {
       });
       players.push(player1);
       players.push(player2);
-
-      // for (const p of players) {
-      //   await request(app.getHttpServer())
-      //     .post(`/games/${game.id}/add-player`)
-      //     .send({ playerId: p.id });
-      //   // .then((res) => {
-      //   //   console.log(res);
-      //   // });
-      // }
     });
 
     it('returns an exception: catch game error ...', () => {
