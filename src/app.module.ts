@@ -7,6 +7,7 @@ import { PlayersModule } from './players/players.module';
 import { Players } from './players/players.entity';
 import { MovesModule } from './moves/moves.module';
 import { Moves } from './moves/moves.entity';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { Moves } from './moves/moves.entity';
     }),
     PlayersModule,
     MovesModule,
+    EventsModule,
   ],
   providers: [],
 })

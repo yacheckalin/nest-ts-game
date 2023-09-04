@@ -87,4 +87,10 @@ export class GamesController {
   makeMove(@Body() body: Partial<MakeMoveDto>): Promise<Moves> {
     return this.movesService.makeMove(body);
   }
+
+  @ApiOperation({ summary: 'Get first available game' })
+  @Post('/available')
+  getFirstAvailable() {
+    return this.gamesService.getFirstAvailable();
+  }
 }

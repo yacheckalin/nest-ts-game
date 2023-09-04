@@ -158,4 +158,17 @@ export class GamesService {
       players: updatedPlayerOrder,
     });
   }
+
+  async getFirstAvailable(): Promise<Games> {
+    const game = await this.repo
+      .createQueryBuilder('games')
+      .addSelect('games.*')
+      .innerJoinAndSelect('games.players', 'players')
+      .addSelect('COUNT(players.id)')
+      .groupBy('games.id')
+      .having('COUNT(players.id) < games.maxPlayer')
+      .getOne();
+
+    return game;
+  }
 }

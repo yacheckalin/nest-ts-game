@@ -30,6 +30,7 @@ class GamesServiceMock {
     return {};
   }
   removePlayerFromGameById(id: number, playerId: number) {}
+  getFirstAvailable() {}
 }
 
 describe('GamesService', () => {
@@ -74,6 +75,11 @@ describe('GamesService', () => {
     const getGamesSpy = jest.spyOn(service, 'getAllGames');
     service.getAllGames();
     expect(getGamesSpy).toHaveBeenCalled();
+  });
+  it('should call getFirstAvailable method', () => {
+    const getFirstAvailableSpy = jest.spyOn(service, 'getFirstAvailable');
+    service.getFirstAvailable();
+    expect(getFirstAvailableSpy).toHaveBeenCalled();
   });
 
   it('should call startGame method with expected param', async () => {

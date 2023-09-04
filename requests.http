@@ -20,6 +20,8 @@ GET http://localhost:3000/games/4
 ### Get all games
 GET http://localhost:3000/games
 
+### Get first available game
+POST http://localhost:3000/games/available
 
 ### Start game
 POST http://localhost:3000/games/4/start

@@ -27,6 +27,7 @@ describe('GamesController', () => {
             stopGame: jest.fn(() => {}),
             addPlayerToGameById: jest.fn(() => {}),
             removePlayerFromGameById: jest.fn(() => {}),
+            getFirstAvailable: jest.fn(() => {}),
           }),
         },
         {
@@ -50,6 +51,10 @@ describe('GamesController', () => {
     expect(spyService.getAllGames).toHaveBeenCalled();
   });
 
+  it('calling getFirstAvailable method', () => {
+    controller.getFirstAvailable();
+    expect(spyService.getFirstAvailable).toHaveBeenCalled();
+  });
   it('calling createGame method', () => {
     const dto = new CreateGameDto();
 
