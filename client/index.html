@@ -105,11 +105,10 @@
 
       const makeMoveButton = document.getElementById('#make_move');
 
-      if (game.endedAt && game.winner) {
+      if (game && game.endedAt && game.winner) {
         const winner = game.players.filter(
           (player) => player.id === game.winner,
         )[0];
-        console.log(winner, game.players);
         appendInfo(
           { message: `WINNER IS: [${winner.id}] ${winner.nickName} ` },
           'winner_info',
