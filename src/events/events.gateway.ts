@@ -6,6 +6,7 @@ import {
 import { Server } from 'socket.io';
 import { PlayersService } from '../players/players.service';
 import { GamesService } from '../games/games.service';
+import { MovesService } from '../moves/moves.service';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const crypto = require('crypto');
@@ -18,9 +19,10 @@ export class EventsGateway {
   constructor(
     private readonly playerService: PlayersService,
     private readonly gamesService: GamesService,
+    private readonly movesService: MovesService,
   ) {}
 
-  @SubscribeMessage('init-shake')
+  @SubscribeMessage('init-player')
   async handleShake(client: any, payload: any) {
     try {
       let player = null;
@@ -33,12 +35,20 @@ export class EventsGateway {
           });
         }
         player = notBusyPlayer || player;
-        client.emit('init-player', { player });
+        client.emit('broadcast', { player });
       } else {
         player = payload.player;
       }
-      let game = null;
+    } catch (e) {
+      client.emit('error', { message: e.message });
+    }
+  }
 
+  @SubscribeMessage('init-game')
+  async handleInitGame(client: any, payload: any) {
+    try {
+      let game = null;
+      let player = null;
       // get first available game
       if (!payload?.game) {
         const firstAvailableGame = await this.gamesService.getFirstAvailable();
@@ -51,14 +61,58 @@ export class EventsGateway {
           // add player to the first available game
           game = await this.gamesService.addPlayerToGameById(
             firstAvailableGame?.id,
-            player.id,
+            payload.player.id,
           );
 
-          client.emit('init-game', { game, player });
+          // get updated player info
+          player = await this.playerService.getPlayerById(payload.player.id);
+          client.emit('broadcast', { game, player });
         }
       }
     } catch (e) {
-      client.emit('error', e.message);
+      client.emit('error', { message: e.message });
+    }
+  }
+
+  @SubscribeMessage('refresh')
+  async handleRefreshData(client: any, payload: any) {
+    try {
+      const game = payload?.game
+        ? await this.gamesService.getGameInfoById(payload?.game?.id)
+        : null;
+
+      const player = payload?.player
+        ? await this.playerService.getPlayerById(payload.player.id)
+        : null;
+
+      const moves =
+        game && payload?.move
+          ? await this.movesService.getAllByGameId(game.id)
+          : null;
+      client.emit('broadcast', { game, player, move: moves });
+    } catch (e) {
+      client.emit('error', { message: e.message });
+    }
+  }
+
+  @SubscribeMessage('make-move')
+  async handleMakeMove(client: any, payload: any) {
+    try {
+      // make first move
+      const move =
+        (await this.movesService.makeMove({
+          game: payload.game?.id,
+          player: payload.player?.id,
+          value: payload?.value || null,
+        })) || null;
+
+      client.emit('broadcast', {
+        move,
+        game: payload.game,
+        player: payload.player,
+      });
+    } catch (e) {
+      client.emit('error', { message: e.message });
     }
   }
 }

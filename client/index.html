@@ -5,44 +5,232 @@
       integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
       crossorigin="anonymous"
     ></script>
-    <script>
-      const socket = io('http://localhost:3000');
-      socket.on('connect', function () {
-        console.log('Connected');
-
-        const currentPlayer = localStorage.getItem('player');
-        const player = currentPlayer ? JSON.parse(currentPlayer) : null;
-        const currentGame = localStorage.getItem('game');
-        const game = currentGame ? JSON.parse(currentGame) : null;
-
-        if (player?.status === 'waiting') {
-          // check for user
-        } else if (player?.status === 'playing') {
-          // try to make move
-        }
-
-        console.log(player);
-        // Init Player & Game
-        socket.emit('init-shake', { player, game });
-      });
-
-      socket.on('init-player', (data) => {
-        console.log('init-player', data);
-        localStorage.setItem('player', JSON.stringify(data.player));
-      });
-
-      socket.on('init-game', (data) => {
-        console.log('init-game', data);
-        localStorage.setItem('game', JSON.stringify(data.game));
-      });
-
-      socket.on('error', (data) => console.log('error', data));
-
-      socket.on('disconnect', function () {
-        console.log('Disconnected');
-      });
-    </script>
   </head>
+  <script>
+    const socket = io('http://localhost:3000');
+    socket.on('connect', function () {
+      console.log('Connected');
+      appendInfo({ message: 'Connected to socket ...' });
 
-  <body></body>
+      const currentPlayer = sessionStorage.getItem('player');
+      const currentGame = sessionStorage.getItem('game');
+      const currentMove = sessionStorage.getItem('move');
+
+      const player = currentPlayer ? JSON.parse(currentPlayer) : null;
+      const game = currentGame ? JSON.parse(currentGame) : null;
+      const move = currentMove ? JSON.parse(currentMove) : null;
+
+      displayGameplay();
+      initGameplay();
+
+      // refresh data if it is in the session
+      if (game || player || move) {
+        socket.emit('refresh', { game, player, move });
+      }
+    });
+
+    socket.on('broadcast', (data) => {
+      console.log('broadcast', data);
+      sessionStorage.setItem('player', JSON.stringify(data.player) || null);
+      sessionStorage.setItem('game', JSON.stringify(data.game) || null);
+      sessionStorage.setItem('move', JSON.stringify(data.move) || null);
+
+      if (data?.game) {
+        appendInfo(
+          {
+            message: `Available Game:
+          ID: ${data.game.id}
+          FOR: ${data.game.maxPlayer} PLAYERS
+          STARTED: ${data.game.startedAt}
+          `,
+          },
+          'game_info',
+        );
+      }
+
+      if (data?.player) {
+        appendInfo(
+          {
+            message: `Init player:
+          ID: ${data.player.id}
+          STATUS: ${data.player.status}
+          NICK_NAME: ${data.player.nickName}
+          `,
+          },
+          'player_info',
+        );
+      }
+
+      if (data?.move) {
+        for (const d of data.move) {
+          appendInfo(
+            {
+              message: `Move:
+            ID: ${d.id}
+            PLAYER: [${d?.player?.id}] ${d?.player?.nickName}
+            VALUE: ${d.value}
+          `,
+            },
+            'move_info',
+          );
+        }
+      }
+    });
+    socket.on('error', (data) => {
+      console.log('error', data);
+      appendInfo({ message: data.message }, 'error');
+    });
+
+    socket.on('disconnect', function () {
+      console.log('Disconnected');
+      appendInfo({ message: 'Dicsonnected from server ...' });
+      sessionStorage.clear();
+    });
+
+    const appendInfo = (data, id = 'intro') => {
+      const p = document.getElementById(`#${id}`);
+      const div = document.createElement('div');
+      div.innerText = data.message;
+      p.appendChild(div);
+    };
+
+    const displayGameplay = () => {
+      const currentPlayer = sessionStorage.getItem('player');
+      const currentGame = sessionStorage.getItem('game');
+      const currentMove = sessionStorage.getItem('move');
+
+      const player = currentPlayer ? JSON.parse(currentPlayer) : null;
+      const game = currentGame ? JSON.parse(currentGame) : null;
+      const move = currentMove ? JSON.parse(currentMove) : null;
+
+      const makeMoveButton = document.getElementById('#make_move');
+
+      if (game.endedAt && game.winner) {
+        const winner = game.players.filter(
+          (player) => player.id === game.winner,
+        )[0];
+        console.log(winner, game.players);
+        appendInfo(
+          { message: `WINNER IS: [${winner.id}] ${winner.nickName} ` },
+          'winner_info',
+        );
+      }
+      if (
+        game &&
+        !game?.endedAt &&
+        !game?.winner &&
+        game?.players.length == game.maxPlayer
+      ) {
+        makeMoveButton.removeAttribute('disabled');
+      } else {
+        makeMoveButton.setAttribute('disabled', true);
+      }
+
+      const initPlayerButton = document.getElementById('#init_player');
+      if (!player) {
+        initPlayerButton.removeAttribute('disabled');
+      } else {
+        initPlayerButton.setAttribute('disabled', true);
+      }
+
+      const initGameButton = document.getElementById('#init_game');
+      if (!game && player) {
+        initGameButton.removeAttribute('disabled');
+      } else {
+        initGameButton.setAttribute('disabled', true);
+      }
+    };
+
+    const initGameplay = () => {
+      const currentPlayer = sessionStorage.getItem('player');
+      const currentGame = sessionStorage.getItem('game');
+      const currentMove = sessionStorage.getItem('move');
+
+      const player = currentPlayer ? JSON.parse(currentPlayer) : null;
+      const game = currentGame ? JSON.parse(currentGame) : null;
+      const move = currentMove ? JSON.parse(currentMove) : null;
+
+      const makeMoveButton = document.getElementById('#make_move');
+      const initPlayerButton = document.getElementById('#init_player');
+      const initGameButton = document.getElementById('#init_game');
+
+      makeMoveButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        socket.emit('make-move', { game, player, move });
+      });
+      initPlayerButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        socket.emit('init-player');
+      });
+      initGameButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        socket.emit('init-game', { player, game, move });
+      });
+    };
+    const displayInfo = ({ game, player, move }) => {
+      if (player) {
+        appendInfo(
+          {
+            message: `Init player:
+          ID: ${player?.id}
+          STATUS: ${player?.status}
+          NICK_NAME: ${player?.nickName}
+          `,
+          },
+          'player_info',
+        );
+      }
+      if (game) {
+        appendInfo(
+          {
+            message: `Available Game:
+          ID: ${game?.id}
+          FOR: ${game?.maxPlayer} PLAYERS
+          WINNER: ${game?.winner},
+          STARTED: ${game?.startedAt},
+          STOPPED: ${game?.stoppedAt},
+          ENDED: ${game?.endedAt},
+          PLAYERS: ${game?.players.map(
+            ({ id, status, nickName }) => `[${nickName}] :: ${status}`,
+          )}
+          `,
+          },
+          'game_info',
+        );
+      }
+
+      if (move) {
+        for (const d of data.move) {
+          appendInfo(
+            {
+              message: `Move:
+            ID: ${d.id}
+            PLAYER: ${d?.player?.nickName}
+            VALUE: ${d.value}
+          `,
+            },
+            'move_info',
+          );
+        }
+      }
+    };
+  </script>
+
+  <body>
+    <div>
+      <p id="#intro"></p>
+      <p id="#player_info"></p>
+      <p id="#game_info"></p>
+      <p id="#error" style="color: red"></p>
+    </div>
+    <div>
+      <p id="#move_info"></p>
+    </div>
+    <div>
+      <button id="#init_player" disabled>INIT PLAYER</button>
+      <button id="#init_game" disabled>INIT GAME</button>
+      <button id="#make_move" disabled>MAKE A MOVE</button>
+    </div>
+    <div id="#winner_info" style="color: green"></div>
+  </body>
 </html>

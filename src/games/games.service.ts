@@ -36,7 +36,10 @@ export class GamesService {
   async getGameInfoById(id: number): Promise<Games> {
     const game = await this.repo.findOne({
       where: { id },
-      relations: { players: true },
+      relations: {
+        players: true,
+        moves: true,
+      },
     });
 
     if (!game) {
@@ -46,13 +49,13 @@ export class GamesService {
   }
 
   async getAllGames(): Promise<Games[] | []> {
-    return this.repo.find({ relations: { players: true } });
+    return this.repo.find({ relations: { players: true, moves: true } });
   }
 
   async startGame(id: number) {
     const game = await this.repo.findOne({
       where: { id },
-      relations: { players: true },
+      relations: { players: true, moves: true },
     });
 
     if (!game) {
@@ -69,14 +72,21 @@ export class GamesService {
     if (game.startedAt) {
       throw new BadRequestException('The game has already been started!');
     }
+    for (const p of game.players) {
+      await this.playersRepo.save({ ...p, status: PlayersStatus.PLAYING });
+    }
 
-    return this.repo.save({ ...game, startedAt: new Date(), stoppedAt: null });
+    return this.repo.save({
+      ...game,
+      startedAt: new Date(),
+      stoppedAt: null,
+    });
   }
 
   async stopGame(id: number) {
     const game = await this.repo.findOne({
       where: { id },
-      relations: { players: true },
+      relations: { players: true, moves: true },
     });
 
     if (!game) {
@@ -95,7 +105,7 @@ export class GamesService {
   async addPlayerToGameById(id: number, playerId: number): Promise<Games> {
     const game = await this.repo.findOne({
       where: { id },
-      relations: { players: true },
+      relations: { players: true, moves: true },
       order: { players: { numberInLine: 'ASC' } },
     });
 
@@ -113,7 +123,7 @@ export class GamesService {
     }
 
     if (!game.players.filter(({ id }) => id === playerId).length) {
-      player.status = PlayersStatus.PLAYING;
+      player.status = PlayersStatus.WAITING;
       player.numberInLine = game.players.length + 1;
       const updatedPlayer = await this.playersRepo.save(player);
 
@@ -122,16 +132,19 @@ export class GamesService {
         players: [...game.players, updatedPlayer],
       });
     } else {
-      throw new BadRequestException(
-        'This player has already in a game pool ...',
-      );
+      return game;
     }
+    // else {
+    //   throw new BadRequestException(
+    //     'This player has already in a game pool ...',
+    //   );
+    // }
   }
 
   async removePlayerFromGameById(id: number, playerId: number): Promise<Games> {
     const game = await this.repo.findOne({
       where: { id },
-      relations: { players: true },
+      relations: { players: true, moves: true },
       order: { players: { numberInLine: 'ASC' } },
     });
 
@@ -144,7 +157,7 @@ export class GamesService {
       throw new NotFoundException('There is no player with such ID');
     }
 
-    player.status = PlayersStatus.WAITING;
+    player.status = PlayersStatus.PENDING;
     player.numberInLine = 1;
     await this.playersRepo.save(player);
 

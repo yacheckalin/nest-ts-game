@@ -13,6 +13,7 @@ import {
 export enum PlayersStatus {
   WAITING = 'waiting',
   PLAYING = 'playing',
+  PENDING = 'pending',
 }
 
 @Entity()
@@ -28,7 +29,7 @@ export class Players {
     examples: [PlayersStatus.PLAYING, PlayersStatus.WAITING],
     description: 'Shows whos been playing',
   })
-  @Column({ default: PlayersStatus.WAITING, enum: PlayersStatus })
+  @Column({ default: PlayersStatus.PENDING, enum: PlayersStatus })
   status: string;
 
   @ApiProperty({ example: 1, description: 'The number in players pool' })
