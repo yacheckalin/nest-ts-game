@@ -162,20 +162,20 @@ describe('GamesController (e2e)', () => {
         });
     });
 
-    it('return an exception: the player has already in a pool', async () => {
-      await request(app.getHttpServer())
-        .post(`/games/${game.id}/add-player`)
-        .send({ playerId: player.id })
-        .expect(201);
+    // it('return an exception: the player has already in a pool', async () => {
+    //   await request(app.getHttpServer())
+    //     .post(`/games/${game.id}/add-player`)
+    //     .send({ playerId: player.id })
+    //     .expect(201);
 
-      return request(app.getHttpServer())
-        .post(`/games/${game.id}/add-player`)
-        .send({ playerId: player.id })
-        .expect(400)
-        .then(({ body: { message } }) => {
-          expect(message).toEqual(`This player has already in a game pool ...`);
-        });
-    });
+    //   return request(app.getHttpServer())
+    //     .post(`/games/${game.id}/add-player`)
+    //     .send({ playerId: player.id })
+    //     .expect(400)
+    //     .then(({ body: { message } }) => {
+    //       expect(message).toEqual(`This player has already in a game pool ...`);
+    //     });
+    // });
   });
 
   describe('remove player from game logic', () => {

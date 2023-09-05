@@ -4,6 +4,7 @@ import { EventsGateway } from './events.gateway';
 import { PlayersService } from '../players/players.service';
 import { CreatePlayerDto } from '../players/dto/create-player.dto';
 import { GamesService } from '../games/games.service';
+import { MovesService } from '../moves/moves.service';
 
 describe('EventsGateway', () => {
   let gateway: EventsGateway;
@@ -25,6 +26,13 @@ describe('EventsGateway', () => {
             createGame: jest.fn(() => {}),
             addPlayerToGameById: jest.fn(() => {}),
             start: jest.fn(() => {}),
+          }),
+        },
+        {
+          provide: MovesService,
+          useFactory: () => ({
+            makeMove: jest.fn(() => {}),
+            getAllByGameId: jest.fn(() => {}),
           }),
         },
       ],

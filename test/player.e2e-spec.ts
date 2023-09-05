@@ -34,7 +34,7 @@ describe('PlayersController (e2e)', () => {
         .then((res) => {
           const { id, status, numberInLine, nickName } = res.body;
           expect(id).toBeDefined();
-          expect(status).toEqual('waiting');
+          expect(status).toEqual('pending');
           expect(numberInLine).toEqual(1);
           expect(nickName).toEqual('Test_1');
         });
@@ -49,7 +49,7 @@ describe('PlayersController (e2e)', () => {
         const { id, nickName, status, numberInLine, game } = res.body;
         expect(id).toBeDefined();
         expect(nickName).toEqual('Test_1');
-        expect(status).toEqual('waiting');
+        expect(status).toEqual('pending');
         expect(numberInLine).toEqual(1);
         expect(game).toBeNull();
       });
