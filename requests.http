@@ -15,14 +15,16 @@ Content-Type: application/json
 }
 
 ### Get game info by ID
-GET http://localhost:3000/games/4
+GET http://localhost:3000/games/21
 
 ### Get all games
 GET http://localhost:3000/games
 
+### Get first available game
+POST http://localhost:3000/games/available
 
 ### Start game
-POST http://localhost:3000/games/4/start
+POST http://localhost:3000/games/26/start
 
 
 ### Stop game
@@ -49,8 +51,8 @@ POST http://localhost:3000/games/make-move
 Content-Type: application/json
 
 {
-  "game": 4,
-  "player": 1
+  "game": 21,
+  "player": 45
 }
 
 ### Create new player

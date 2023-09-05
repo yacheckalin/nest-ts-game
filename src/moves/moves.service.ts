@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Moves } from './moves.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +19,21 @@ export class MovesService {
     private readonly playersRepo: Repository<Players>,
     @InjectRepository(Games) private readonly gamesRepo: Repository<Games>,
   ) {}
+
+  async getAllByGameId(gameId: number): Promise<Moves[]> {
+    const game = await this.gamesRepo.findOne({ where: { id: gameId } });
+
+    if (!game) {
+      throw new NotFoundException('There is no such game');
+    }
+
+    return await this.repo
+      .createQueryBuilder('moves')
+      .innerJoinAndSelect('moves.game', 'game')
+      .innerJoinAndSelect('moves.player', 'player')
+      .where('game.id = :gameId', { gameId })
+      .getMany();
+  }
 
   async makeMove(data: Partial<MakeMoveDto>): Promise<Moves> {
     const player = await this.playersRepo.findOne({

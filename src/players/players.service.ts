@@ -55,6 +55,6 @@ export class PlayersService {
   }
 
   getNotBusyPlayer(): Promise<Players> {
-    return this.repo.findOne({ where: { status: PlayersStatus.WAITING } });
+    return this.repo.findOne({ where: { status: PlayersStatus.PENDING } });
   }
 }
