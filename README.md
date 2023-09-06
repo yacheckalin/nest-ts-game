@@ -48,6 +48,8 @@ Jest
 Socket.io
 REST API
 
+![high-level architecture](/client/sockets-diagram.png)
+
 ## DB Relations
 
 **Game.Entity**
@@ -103,7 +105,7 @@ REST API
 > When the player will be leaving the game, his status will be changed to **PENDING**
 > When the game has overed statuses of all involved players will be changed to **PENDING**
 
-## Non-happy pathes (Exceptions)
+## Non-happy pathes (Exceptions - 404, 400, 500)
 
 **Add to the game pool**
 
@@ -132,8 +134,8 @@ REST API
 - [x] add test/dev environment
 - [x] add more statuses (only when game is starting, player status will be 'playing')
 - [x] add WebSockets (add redis-adapter / socket.io platform)
-- [] refactor services (move reusable code)
-- [] remove all hard-code (constants)
+- [x] refactor services (move reusable code)
+- [x] remove all hard-code (constants)
 - [x] add Swagger for the documentation
 - [x] add history of versions updates
 
