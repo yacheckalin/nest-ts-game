@@ -54,29 +54,35 @@ REST API
 
 **Game.Entity**
 
-> id: number
-> maxPlayer: number
-> createdAt: Date
-> startedAt: Date
-> endedAt: Date
-> winner: number
-> players: Players[]
+```javascript
+ id: number;
+ maxPlayer: number;
+ createdAt: Date;
+ startedAt: Date;
+ endedAt: Date;
+ winner: number;
+ players: Players[];
+```
 
 **Player.Entity**
 
-> id: number
-> nickName: string
-> createdAt: Date
-> game: Game
-> move: Moves[]
+```javascript
+ id: number;
+ nickName: string;
+ createdAt: Date;
+ game: Game;
+ move: Moves[];
+```
 
 **Moves.Entity**
 
-> id: number
-> game: Games
-> player: Players
-> value: number
-> createdAt: Date
+```javascript
+id: number;
+game: Games;
+player: Players;
+value: number;
+createdAt: Date;
+```
 
 ## The flow
 
@@ -101,8 +107,8 @@ REST API
 
 **PLAYING** is status assigned when the game has begun and this player is taking part in it.
 
-> When the player is added to the game his status will be changed to **WAITING**
-> When the player will be leaving the game, his status will be changed to **PENDING**
+> When the player is added to the game his status will be changed to **WAITING** <br/>
+> When the player will be leaving the game, his status will be changed to **PENDING**<br/>
 > When the game has overed statuses of all involved players will be changed to **PENDING**
 
 ## Non-happy pathes (Exceptions - 404, 400, 500)
