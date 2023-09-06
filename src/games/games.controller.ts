@@ -90,7 +90,7 @@ export class GamesController {
 
   @ApiOperation({ summary: 'Get first available game' })
   @Post('/available')
-  getFirstAvailable() {
+  getFirstAvailable(): Promise<Games> {
     return this.gamesService.getFirstAvailable();
   }
 }

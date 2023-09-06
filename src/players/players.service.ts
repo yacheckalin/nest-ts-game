@@ -37,14 +37,9 @@ export class PlayersService {
     body: Partial<CreatePlayerDto>,
   ): Promise<Players> {
     try {
-      const player = await this.repo.findOne({ where: { id } });
-
-      if (!player) {
-        throw new NotFoundException('There is no player with such ID');
-      }
+      const player = await this.getPlayerById(id);
       const updatedPlayer = { ...player, ...body };
-      const result = await this.repo.save(updatedPlayer);
-      return result;
+      return this.repo.save(updatedPlayer);
     } catch (e) {
       throw new InternalServerErrorException(e.message);
     }
