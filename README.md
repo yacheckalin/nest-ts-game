@@ -137,18 +137,6 @@ createdAt: Date;
 - if the game is not started yet
 - if the game is not exists
 
-## Technical Debt
-
-- [x] add unit tests
-- [x] add e2e tests
-- [x] add test/dev environment
-- [x] add more statuses (only when game is starting, player status will be 'playing')
-- [x] add WebSockets (add redis-adapter / socket.io platform)
-- [x] refactor services (move reusable code)
-- [x] remove all hard-code (constants)
-- [x] add Swagger for the documentation
-- [x] add history of versions updates
-
 ## Use cases
 
 Actors: [client]
