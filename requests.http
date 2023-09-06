@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Get game info by ID
-GET http://localhost:3000/games/21
+GET http://localhost:3000/games/30
 
 ### Get all games
 GET http://localhost:3000/games
@@ -24,18 +24,18 @@ GET http://localhost:3000/games
 POST http://localhost:3000/games/available
 
 ### Start game
-POST http://localhost:3000/games/26/start
+POST http://localhost:3000/games/30/start
 
 
 ### Stop game
 POST http://localhost:3000/games/1/stop
 
 ### Add player to game
-POST http://localhost:3000/games/4/add-player
+POST http://localhost:3000/games/31/add-player
 Content-Type: application/json
 
 {
-  "playerId": 1
+  "playerId": 57
 }
 
 ### Remove player from game
@@ -51,8 +51,8 @@ POST http://localhost:3000/games/make-move
 Content-Type: application/json
 
 {
-  "game": 21,
-  "player": 45
+  "game": 30,
+  "player": 57
 }
 
 ### Create new player
@@ -64,7 +64,7 @@ Content-Type: application/json
 }
 
 ### Get player info by ID
-GET http://localhost:3000/players/2
+GET http://localhost:3000/players/56
 
 ### Update player by ID
 PATCH  http://localhost:3000/players/2

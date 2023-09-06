@@ -78,16 +78,16 @@ export class EventsGateway {
   async handleRefreshData(client: any, payload: any) {
     try {
       const game = payload?.game
-        ? await this.gamesService.getGameInfoById(payload?.game?.id)
+        ? await this.gamesService.getGameInfoById(payload.game?.id)
         : null;
 
       const player = payload?.player
-        ? await this.playerService.getPlayerById(payload.player.id)
+        ? await this.playerService.getPlayerById(payload.player?.id)
         : null;
 
       const moves =
         game && payload?.move
-          ? await this.movesService.getAllByGameId(game.id)
+          ? await this.movesService.getAllByGameId(+game.id)
           : null;
       client.emit('broadcast', { game, player, move: moves });
     } catch (e) {

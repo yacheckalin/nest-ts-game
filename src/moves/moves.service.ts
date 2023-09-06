@@ -10,6 +10,7 @@ import { MakeMoveDto } from './dto/make-move.dto';
 import { Players, PlayersStatus } from '../players/players.entity';
 import { Games } from '../games/games.entity';
 import { calculate } from './store/helpers';
+import { FIRST_MOVE_VALUE_LIMIT } from './store/constants';
 
 @Injectable()
 export class MovesService {
@@ -85,7 +86,9 @@ export class MovesService {
     const returnedValue =
       data?.value ||
       calculate(
-        game.moves.length ? lastMoveValue : Math.floor(Math.random() * 45) + 1,
+        game.moves.length
+          ? lastMoveValue
+          : Math.floor(Math.random() * FIRST_MOVE_VALUE_LIMIT) + 1,
       );
 
     const returnedDate = new Date();
@@ -104,10 +107,12 @@ export class MovesService {
         endedAt: returnedDate,
         winner: player.id,
       });
-      for (const p of game.players) {
+
+      // change status all involved players to PENDING
+      for (const player of game.players) {
         await this.playersRepo.save({
-          ...p,
-          status: PlayersStatus.WAITING,
+          ...player,
+          status: PlayersStatus.PENDING,
           numberInLine: 1,
         });
       }

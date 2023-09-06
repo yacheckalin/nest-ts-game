@@ -139,11 +139,6 @@ describe('GamesController (e2e)', () => {
         nickName: 'PLAYER_2',
         numberInLine: 2,
       });
-      const playerThree = await createPlayer({
-        nickName: 'PLAYER_3',
-        numberInLine: 3,
-      });
-
       await request(app.getHttpServer())
         .post(`/games/${game.id}/add-player`)
         .send({ playerId: playerOne.id })
@@ -279,23 +274,24 @@ describe('GamesController (e2e)', () => {
         nickName: 'TEST_2',
         numberInLine: 2,
       });
+      const newGame = await createGame(2);
 
       await request(app.getHttpServer())
-        .patch('/games/1')
+        .patch(`/games/${newGame.id}`)
         .send({ startedAt: new Date(), endedAt: null, maxPlayer: 2 })
         .expect(200);
 
       await request(app.getHttpServer())
-        .post('/games/1/add-player')
+        .post(`/games/${newGame.id}/add-player`)
         .send({ playerId: playerOne.id })
         .expect(201);
       await request(app.getHttpServer())
-        .post('/games/1/add-player')
+        .post(`/games/${newGame.id}/add-player`)
         .send({ playerId: playerTwo.id })
         .expect(201);
 
       return request(app.getHttpServer())
-        .post('/games/1/start')
+        .post(`/games/${newGame.id}/start`)
         .expect(400)
         .then(({ body: { message } }) => {
           expect(message).toEqual(`The game has already been started!`);
@@ -311,32 +307,23 @@ describe('GamesController (e2e)', () => {
         nickName: 'TEST_2',
         numberInLine: 2,
       });
+      const newGame = await createGame(2);
       await request(app.getHttpServer())
-        .patch('/games/1')
-        .send({
-          startedAt: null,
-          stoppedAt: null,
-          endedAt: null,
-          winner: null,
-          maxPlayer: 2,
-        })
-        .expect(200);
-      await request(app.getHttpServer())
-        .post('/games/1/add-player')
+        .post(`/games/${newGame.id}/add-player`)
         .send({ playerId: playerOne.id })
         .expect(201);
       await request(app.getHttpServer())
-        .post('/games/1/add-player')
+        .post(`/games/${newGame.id}/add-player`)
         .send({ playerId: playerTwo.id })
         .expect(201);
 
       return request(app.getHttpServer())
-        .post('/games/1/start')
+        .post(`/games/${newGame.id}/start`)
         .expect(201)
         .then((res) => {
           const { id, startedAt, endedAt, stoppedAt, winner } = res.body;
 
-          expect(id).toEqual(1);
+          expect(id).toEqual(newGame.id);
           expect(startedAt).toBeDefined();
           expect(endedAt).toBeNull();
           expect(stoppedAt).toBeNull();

@@ -24,13 +24,8 @@ export class GamesService {
   }
 
   async updateGame(id: number, body: Partial<UpdateGameDto>): Promise<Games> {
-    const game = await this.repo.findOne({ where: { id } });
-
-    if (!game) {
-      throw new NotFoundException('There is no game with such ID');
-    }
-    const updatedGame = { ...game, ...body };
-    return this.repo.save(updatedGame);
+    const game = await this.getGameInfoById(id);
+    return this.repo.save({ ...game, ...body });
   }
 
   async getGameInfoById(id: number): Promise<Games> {
@@ -40,6 +35,7 @@ export class GamesService {
         players: true,
         moves: true,
       },
+      order: { players: { numberInLine: 'ASC' } },
     });
 
     if (!game) {
@@ -52,15 +48,9 @@ export class GamesService {
     return this.repo.find({ relations: { players: true, moves: true } });
   }
 
-  async startGame(id: number) {
-    const game = await this.repo.findOne({
-      where: { id },
-      relations: { players: true, moves: true },
-    });
+  async startGame(id: number): Promise<Games> {
+    const game = await this.getGameInfoById(id);
 
-    if (!game) {
-      throw new NotFoundException('There is no game with such ID');
-    }
     if (game.endedAt && game.winner) {
       throw new BadRequestException('The game has already overed!');
     }
@@ -72,8 +62,8 @@ export class GamesService {
     if (game.startedAt) {
       throw new BadRequestException('The game has already been started!');
     }
-    for (const p of game.players) {
-      await this.playersRepo.save({ ...p, status: PlayersStatus.PLAYING });
+    for (const player of game.players) {
+      await this.playersRepo.save({ ...player, status: PlayersStatus.PLAYING });
     }
 
     return this.repo.save({
@@ -83,15 +73,9 @@ export class GamesService {
     });
   }
 
-  async stopGame(id: number) {
-    const game = await this.repo.findOne({
-      where: { id },
-      relations: { players: true, moves: true },
-    });
+  async stopGame(id: number): Promise<Games> {
+    const game = await this.getGameInfoById(id);
 
-    if (!game) {
-      throw new NotFoundException('There is no game with such ID');
-    }
     if (!game.startedAt) {
       throw new BadRequestException('Game did not start yet!');
     }
@@ -103,15 +87,7 @@ export class GamesService {
   }
 
   async addPlayerToGameById(id: number, playerId: number): Promise<Games> {
-    const game = await this.repo.findOne({
-      where: { id },
-      relations: { players: true, moves: true },
-      order: { players: { numberInLine: 'ASC' } },
-    });
-
-    if (!game) {
-      throw new NotFoundException('There is no game with such ID');
-    }
+    const game = await this.getGameInfoById(id);
 
     const player = await this.playersRepo.findOne({ where: { id: playerId } });
     if (!player) {
@@ -142,15 +118,7 @@ export class GamesService {
   }
 
   async removePlayerFromGameById(id: number, playerId: number): Promise<Games> {
-    const game = await this.repo.findOne({
-      where: { id },
-      relations: { players: true, moves: true },
-      order: { players: { numberInLine: 'ASC' } },
-    });
-
-    if (!game) {
-      throw new NotFoundException('There is no game with such ID');
-    }
+    const game = await this.getGameInfoById(id);
 
     const player = await this.playersRepo.findOne({ where: { id: playerId } });
     if (!player) {
@@ -175,7 +143,6 @@ export class GamesService {
   async getFirstAvailable(): Promise<Games> {
     const game = await this.repo
       .createQueryBuilder('games')
-      // .addSelect('games.*')
       .leftJoinAndSelect('games.players', 'players')
       .addSelect('COUNT(players.id)')
       .groupBy('games.id')
