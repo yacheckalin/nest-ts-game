@@ -40,13 +40,15 @@ $ npm run test:cov
 
 ## Stack
 
-Typescript
-Nest.js
-TypeORM
-SQLite
-Jest
-Socket.io
-REST API
+This application is implemented by:
+
+<div>Typescript</div>
+<div>Nest.js</div>
+<div>TypeORM</div>
+<div>SQLite</div>
+<div>Jest</div>
+<div>Socket.io</div>
+<div>REST API</div>
 
 ![high-level architecture](/client/sockets-diagram.png)
 
