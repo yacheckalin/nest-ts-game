@@ -50,6 +50,8 @@ This application is implemented by:
 <div>Socket.io</div>
 <div>REST API</div>
 
+## High-level architecture
+
 ![high-level architecture](/client/sockets-diagram.png)
 
 ## DB Relations
