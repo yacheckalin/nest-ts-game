@@ -1,3 +1,5 @@
+**CURRENT VERSION: 1.0.0**
+
 ## Description
 
 When a player starts, it incepts a random (whole) number and sends it to the second player as an approach to starting the game.
@@ -35,6 +37,16 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Stack
+
+Typescript
+Nest.js
+TypeORM
+SQLite
+Jest
+Socket.io
+REST API
 
 ## DB Relations
 
@@ -93,7 +105,7 @@ $ npm run test:cov
 
 ## Non-happy pathes (Exceptions)
 
-**Add to game pool**
+**Add to the game pool**
 
 - if player has already in the game pool
 - if game pool is fullfiled
@@ -101,14 +113,14 @@ $ npm run test:cov
 - if game has already ended (and we have a winner)
 - if there is no player with such ID
 
-**Start game**
+**Start the game**
 
 - if the game is already ended
 - if the game is not exists
 - if the game pool is not fullfiled yet
 - if the game has already started
 
-**Stop game**
+**Stop the game**
 
 - if the game is not started yet
 - if the game is not exists
@@ -129,9 +141,8 @@ $ npm run test:cov
 
 Actors: [client]
 
-- as a client, I want to be able to initialize as a player for first not completed/non-started game (the game with the empty slots in the players pool)
-- as a client, I want to be able initialize once (any refresh of the page will give the same GAME_ID, PLAYER_ID statuses)
-- game will start automaticaly when the players pool will be fullfiled
+- as a client, I want to be able to jump into the existing game
+- as a client, I want to be able to make a move
 - as a client, I want to see values from the moves of other players
 - as a client, I want to be informed whos WINN
 
@@ -140,8 +151,6 @@ Actors: [client]
 Swagger API documentation is available by:
 
 `http://localhost:3000/api`
-
-**CURRENT VERSION: 1.0.0**
 
 ## Versions History
 
