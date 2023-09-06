@@ -54,29 +54,35 @@ REST API
 
 **Game.Entity**
 
-> id: number
-> maxPlayer: number
-> createdAt: Date
-> startedAt: Date
-> endedAt: Date
-> winner: number
-> players: Players[]
+```javascript
+ id: number;
+ maxPlayer: number;
+ createdAt: Date;
+ startedAt: Date;
+ endedAt: Date;
+ winner: number;
+ players: Players[];
+```
 
 **Player.Entity**
 
-> id: number
-> nickName: string
-> createdAt: Date
-> game: Game
-> move: Moves[]
+```javascript
+ id: number;
+ nickName: string;
+ createdAt: Date;
+ game: Game;
+ move: Moves[];
+```
 
 **Moves.Entity**
 
-> id: number
-> game: Games
-> player: Players
-> value: number
-> createdAt: Date
+```javascript
+id: number;
+game: Games;
+player: Players;
+value: number;
+createdAt: Date;
+```
 
 ## The flow
 
