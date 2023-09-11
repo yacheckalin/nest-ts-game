@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PlayersController } from './players.controller';
 import { PlayersService } from './players.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
+import { UpdatePlayerDto } from './dto/update-player.dto';
 
 describe('PlayersController', () => {
   let controller: PlayersController;
@@ -49,7 +50,7 @@ describe('PlayersController', () => {
     expect(spyService.getPlayerById).toHaveBeenCalledWith(1);
   });
   it('calling updatePlayer method', () => {
-    const dto = new CreatePlayerDto();
+    const dto = new UpdatePlayerDto();
     controller.updatePlayer(1, dto);
     expect(spyService.updatePlayerById).toHaveBeenCalled();
     expect(spyService.updatePlayerById).toHaveBeenCalledWith(1, dto);

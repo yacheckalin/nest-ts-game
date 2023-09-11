@@ -11,6 +11,7 @@ import { PlayersService } from './players.service';
 import { Players } from './players.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UpdatePlayerDto } from './dto/update-player.dto';
 
 @ApiTags('players')
 @Controller('players')
@@ -31,11 +32,11 @@ export class PlayersController {
   }
 
   @ApiOperation({ summary: 'Update players info by id' })
-  @ApiBody({ type: () => CreatePlayerDto })
+  @ApiBody({ type: () => UpdatePlayerDto })
   @Patch('/:id')
   updatePlayer(
     @Param('id', new ParseIntPipe()) id: number,
-    @Body() body: Partial<CreatePlayerDto>,
+    @Body() body: UpdatePlayerDto,
   ): Promise<Players> {
     return this.playersService.updatePlayerById(+id, body);
   }

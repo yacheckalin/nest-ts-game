@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PlayersService } from './players.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
+import { UpdatePlayerDto } from './dto/update-player.dto';
 
 class PlayerServiceMock {
   findAllPlayers() {
@@ -13,7 +14,7 @@ class PlayerServiceMock {
   getPlayerById(id: number) {
     return Promise.resolve({ id });
   }
-  updatePlayerById(id: number, data: Partial<CreatePlayerDto>) {
+  updatePlayerById(id: number, data: UpdatePlayerDto) {
     return Promise.resolve({ id, ...data });
   }
   getNotBusyPlayer() {
@@ -56,7 +57,7 @@ describe('PlayersService', () => {
 
   it('should call updatePlayerById method with expected param', async () => {
     const updatePlayerSpy = jest.spyOn(service, 'updatePlayerById');
-    const dto = new CreatePlayerDto();
+    const dto = new UpdatePlayerDto();
     service.updatePlayerById(1, dto);
     expect(updatePlayerSpy).toHaveBeenCalledWith(1, dto);
   });

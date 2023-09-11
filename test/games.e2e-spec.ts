@@ -75,28 +75,29 @@ describe('GamesController (e2e)', () => {
           expect(endedAt).toBeNull();
         });
     });
-    it('returns info about the game', () => {
+    it('returns info about the game', async () => {
+      const game = await createGame(2);
       return request(app.getHttpServer())
-        .get('/games/1')
+        .get(`/games/${game.id}`)
         .expect(200)
         .then((res) => {
           const { id, maxPlayer, createdAt } = res.body;
 
-          expect(id).toEqual(1);
-          expect(maxPlayer).toEqual(2);
+          expect(id).toEqual(game.id);
+          expect(maxPlayer).toEqual(game.maxPlayer);
           expect(createdAt).toBeDefined();
         });
     });
   });
 
-  it('returns updated game info', () => {
+  it('returns updated game info', async () => {
+    const game = await createGame(2);
     return request(app.getHttpServer())
-      .patch('/games/1')
+      .patch(`/games/${game.id}`)
       .send({ maxPlayer: 3 })
       .expect(200)
       .then((res) => {
         const { maxPlayer } = res.body;
-
         expect(maxPlayer).toEqual(3);
       });
   });
@@ -213,6 +214,10 @@ describe('GamesController (e2e)', () => {
   });
 
   describe('starts game exceptions logic', () => {
+    let game: Games | null = null;
+    beforeEach(async () => {
+      game = await createGame(2);
+    });
     it('returns NotFoundException when starting game with non-existing ID', () => {
       return request(app.getHttpServer())
         .post('/games/222/start')
@@ -224,7 +229,7 @@ describe('GamesController (e2e)', () => {
 
     it('returns BadRequestException when game does not have enough players', () => {
       return request(app.getHttpServer())
-        .post('/games/1/start')
+        .post(`/games/${game.id}/start`)
         .expect(400)
         .then(({ body: { message } }) => {
           expect(message).toEqual(
@@ -244,21 +249,21 @@ describe('GamesController (e2e)', () => {
       });
 
       await request(app.getHttpServer())
-        .post('/games/1/add-player')
+        .post(`/games/${game.id}/add-player`)
         .send({ playerId: playerOne.id })
         .expect(201);
       await request(app.getHttpServer())
-        .post('/games/1/add-player')
+        .post(`/games/${game.id}/add-player`)
         .send({ playerId: playerTwo.id })
         .expect(201);
 
       await request(app.getHttpServer())
-        .patch('/games/1')
+        .patch(`/games/${game.id}`)
         .send({ endedAt: new Date(), winner: playerOne.id })
         .expect(200);
 
       return request(app.getHttpServer())
-        .post('/games/1/start')
+        .post(`/games/${game.id}/start`)
         .expect(400)
         .then(({ body: { message } }) => {
           expect(message).toEqual(`The game has already overed!`);

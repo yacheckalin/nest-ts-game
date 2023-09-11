@@ -60,14 +60,15 @@ POST http://localhost:3000/players
 Content-Type: application/json
 
 {
-  "nickName": "Player_1"
+  "nickName": "Player_1",
+  "status": "pending"
 }
 
 ### Get player info by ID
 GET http://localhost:3000/players/56
 
 ### Update player by ID
-PATCH  http://localhost:3000/players/2
+PATCH  http://localhost:3000/players/1
 Content-Type: application/json
 
 {

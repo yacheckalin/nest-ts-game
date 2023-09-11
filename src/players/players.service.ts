@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Players, PlayersStatus } from './players.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePlayerDto } from './dto/create-player.dto';
+import { UpdatePlayerDto } from './dto/update-player.dto';
 
 @Injectable()
 export class PlayersService {
@@ -32,12 +33,10 @@ export class PlayersService {
     return player;
   }
 
-  async updatePlayerById(
-    id: number,
-    body: Partial<CreatePlayerDto>,
-  ): Promise<Players> {
+  async updatePlayerById(id: number, body: UpdatePlayerDto): Promise<Players> {
     try {
       const player = await this.getPlayerById(id);
+
       const updatedPlayer = { ...player, ...body };
       return this.repo.save(updatedPlayer);
     } catch (e) {
