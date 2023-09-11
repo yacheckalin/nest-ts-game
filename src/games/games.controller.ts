@@ -37,7 +37,7 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Update game by id' })
-  @ApiExtraModels(UpdateGameDto)
+  @ApiBody({ type: () => UpdateGameDto })
   @Patch('/:id')
   updateGameById(
     @Param('id', new ParseIntPipe()) id: number,
@@ -71,6 +71,7 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Add new player to the games players pool' })
+  @ApiBody({ type: () => AddPlayerDto })
   @Post('/:id/add-player')
   addPlayer(
     @Param('id', new ParseIntPipe()) id: number,
@@ -80,6 +81,7 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Remove player from the pool' })
+  @ApiBody({ type: () => AddPlayerDto })
   @Post('/:id/remove-player')
   removePlayer(
     @Param('id', new ParseIntPipe()) id: number,
@@ -90,6 +92,7 @@ export class GamesController {
 
   @ApiOperation({ summary: 'Make a move in the current game' })
   @ApiExtraModels(MakeMoveDto)
+  @ApiBody({ type: () => MakeMoveDto })
   @Post('/make-move')
   makeMove(@Body() body: Partial<MakeMoveDto>): Promise<Moves> {
     return this.movesService.makeMove(body);
