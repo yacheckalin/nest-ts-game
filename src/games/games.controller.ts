@@ -15,7 +15,12 @@ import { AddPlayerDto } from './dto/add-player.dto';
 import { MakeMoveDto } from '../moves/dto/make-move.dto';
 import { Moves } from '../moves/moves.entity';
 import { MovesService } from '../moves/moves.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiExtraModels,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('games')
 @Controller('games')
@@ -32,6 +37,7 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Update game by id' })
+  @ApiBody({ type: () => UpdateGameDto })
   @Patch('/:id')
   updateGameById(
     @Param('id', new ParseIntPipe()) id: number,
@@ -65,6 +71,7 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Add new player to the games players pool' })
+  @ApiBody({ type: () => AddPlayerDto })
   @Post('/:id/add-player')
   addPlayer(
     @Param('id', new ParseIntPipe()) id: number,
@@ -74,6 +81,7 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Remove player from the pool' })
+  @ApiBody({ type: () => AddPlayerDto })
   @Post('/:id/remove-player')
   removePlayer(
     @Param('id', new ParseIntPipe()) id: number,
@@ -83,6 +91,8 @@ export class GamesController {
   }
 
   @ApiOperation({ summary: 'Make a move in the current game' })
+  @ApiExtraModels(MakeMoveDto)
+  @ApiBody({ type: () => MakeMoveDto })
   @Post('/make-move')
   makeMove(@Body() body: Partial<MakeMoveDto>): Promise<Moves> {
     return this.movesService.makeMove(body);
