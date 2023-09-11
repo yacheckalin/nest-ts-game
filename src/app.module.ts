@@ -8,23 +8,25 @@ import { Players } from './players/players.entity';
 import { MovesModule } from './moves/moves.module';
 import { Moves } from './moves/moves.entity';
 import { EventsModule } from './events/events.module';
+import * as Joi from 'joi';
+import { DatabaseModule } from './database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
-    }),
-    GamesModule,
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'sqlite',
-        database: config.get<string>('SQL_DB_NAME'),
-        entities: [Games, Players, Moves],
-        synchronize: true,
+      validationSchema: Joi.object({
+        POSTGRES_HOST: Joi.string().required(),
+        POSTGRES_PORT: Joi.number().required(),
+        POSTGRES_USER: Joi.string().required(),
+        POSTGRES_PASSWORD: Joi.string().required(),
+        POSTGRES_DB: Joi.string().required(),
+        PORT: Joi.string().required(),
       }),
     }),
+    GamesModule,
+    DatabaseModule,
     PlayersModule,
     MovesModule,
     EventsModule,

@@ -1,0 +1,30 @@
+version: '3'
+services:
+  postgres_dev:
+    container_name: postgres_dev
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5555:5432'
+    networks:
+      - postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=nest-game-app
+  postgres_test:
+    container_name: postgres_test
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5566:5432'
+    networks:
+      - postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=nest-game-app-test
+
+networks:
+  postgres:
+    driver: bridge
