@@ -145,7 +145,8 @@ export class GamesService {
       .createQueryBuilder('games')
       .leftJoinAndSelect('games.players', 'players')
       .addSelect('COUNT(players.id)')
-      .groupBy('games.id')
+      .where('games.startedAt IS NULL')
+      .groupBy('games.id, players.id')
       .having('COUNT(players.id) < games.maxPlayer')
       .getOne();
 

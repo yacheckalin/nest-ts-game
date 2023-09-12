@@ -30,7 +30,7 @@ export class Players {
     description: 'Shows whos been playing',
   })
   @Column({ default: PlayersStatus.PENDING, enum: PlayersStatus })
-  status: string;
+  status?: string;
 
   @ApiProperty({ example: 1, description: 'The number in players pool' })
   @Column({ default: 1 })

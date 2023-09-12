@@ -1,11 +1,12 @@
-import { IsEnum, IsOptional, IsString, Min } from 'class-validator';
+import { IsEnum, IsIn, IsOptional, IsString, Min } from 'class-validator';
 import { PlayersStatus } from '../players.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreatePlayerDto {
-  @ApiProperty({ required: true })
+export class UpdatePlayerDto {
+  @ApiProperty({ required: false })
   @IsString()
-  nickName: string;
+  @IsOptional()
+  nickName?: string;
 
   @ApiProperty({
     required: false,

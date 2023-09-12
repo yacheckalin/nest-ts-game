@@ -24,18 +24,18 @@ GET http://localhost:3000/games
 POST http://localhost:3000/games/available
 
 ### Start game
-POST http://localhost:3000/games/30/start
+POST http://localhost:3000/games/1/start
 
 
 ### Stop game
 POST http://localhost:3000/games/1/stop
 
 ### Add player to game
-POST http://localhost:3000/games/31/add-player
+POST http://localhost:3000/games/1/add-player
 Content-Type: application/json
 
 {
-  "playerId": 57
+  "playerId": 2
 }
 
 ### Remove player from game
@@ -60,14 +60,15 @@ POST http://localhost:3000/players
 Content-Type: application/json
 
 {
-  "nickName": "Player_1"
+  "nickName": "Player_1",
+  "status": "pending"
 }
 
 ### Get player info by ID
 GET http://localhost:3000/players/56
 
 ### Update player by ID
-PATCH  http://localhost:3000/players/2
+PATCH  http://localhost:3000/players/1
 Content-Type: application/json
 
 {
