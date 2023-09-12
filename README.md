@@ -1,4 +1,4 @@
-**CURRENT VERSION: 1.0.0**
+**CURRENT VERSION: 1.0.1**
 
 ## Description
 
@@ -178,13 +178,16 @@ Swagger API documentation is available by:
   - semi-automatical logic for initializing the player (no login)
   - INIT_PLAYER, INIT_GAME, MAKE_MOVE is manualy instantiated from the client side
 
-##### 1.0.1
+##### 1.0.1 --> CURRENT
 
 - change DB to PostgreSQL (add docker-compose for local implementation)
+
+##### 1.0.2
+
 - one player can be involved into several games at a time
   > add active_games table (for Many-To-Many relations between players & games)
 
-##### 1.0.2
+##### 1.0.3
 
 - add "rooms" entity
   > should store information about socket-connection and link any new connection to the existing room
