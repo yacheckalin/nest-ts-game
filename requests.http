@@ -24,7 +24,7 @@ GET http://localhost:3000/games
 POST http://localhost:3000/games/available
 
 ### Start game
-POST http://localhost:3000/games/1/start
+POST http://localhost:3000/games/2/start
 
 
 ### Stop game
@@ -51,8 +51,8 @@ POST http://localhost:3000/games/make-move
 Content-Type: application/json
 
 {
-  "game": 30,
-  "player": 57
+  "game": 2,
+  "player": 1
 }
 
 ### Create new player
